@@ -1,38 +1,28 @@
-# Whitelist approach: ignore everything, then allow only what Docker builds need
-# This reduces build context from ~900MB to just what's required
+# Keep Docker build context predictable for Railway/Railpack.
+# Avoid whitelist-style patterns with `*` + negations, which can be expanded
+# by some builders into invalid copy targets like `/app/**`.
 
-# Ignore everything first
-*
+# VCS and local tooling
+.git
+.github
+.vscode
+.devcontainer
 
-# === n8n main image (docker/images/n8n/Dockerfile) ===
-!compiled
-!compiled/**
-!THIRD_PARTY_LICENSES.md
+# Dependencies and build caches
+node_modules
+**/node_modules
+.pnpm-store
+.turbo
 
-# === runners image (docker/images/runners/Dockerfile + Dockerfile.distroless) ===
-!dist
-!dist/task-runner-javascript
-!dist/task-runner-javascript/**
-!packages
-!packages/@n8n
+# Local env files
+.env
+.env.*
+!.env.local.example
 
-# === Docker build files (entrypoints, configs) ===
-!docker
-!docker/images
-!docker/images/n8n
-!docker/images/n8n/docker-entrypoint.sh
-!docker/images/runners
-!docker/images/runners/n8n-task-runners.json
-
-# === benchmark image (packages/@n8n/benchmark/Dockerfile) ===
-!package.json
-!pnpm-lock.yaml
-!pnpm-workspace.yaml
-!patches
-!patches/**
-!scripts
-!scripts/**
-!packages/@n8n/benchmark
-!packages/@n8n/benchmark/**
-!packages/@n8n/typescript-config
-!packages/@n8n/typescript-config/**
+# Logs and temporary files
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
