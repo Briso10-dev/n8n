@@ -16,7 +16,6 @@
 !packages
 !packages/@n8n
 !packages/@n8n/task-runner-python
-!packages/@n8n/task-runner-python/**
 
 # === Docker build files (entrypoints, configs) ===
 !docker
